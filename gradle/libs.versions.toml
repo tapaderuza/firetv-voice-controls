@@ -1,0 +1,29 @@
+[versions]
+agp = "8.9.2"
+kotlin = "2.3.21"
+compileSdk = "35"
+targetSdk = "34"
+# Fire OS 5 (Android 5.1) is the oldest Fire TV software still in homes; MediaSession exists since API 21.
+minSdk = "22"
+# The sample uses Compose for TV, which needs API 23 (Fire OS 6); the library itself stays at minSdk.
+sampleMinSdk = "23"
+jvmTarget = "17"
+
+androidx-activity = "1.10.1"
+androidx-tv-material = "1.1.0"
+junit = "4.13.2"
+androidx-test-runner = "1.6.2"
+androidx-test-ext-junit = "1.2.1"
+
+[libraries]
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
+androidx-tv-material = { module = "androidx.tv:tv-material", version.ref = "androidx-tv-material" }
+junit = { module = "junit:junit", version.ref = "junit" }
+androidx-test-runner = { module = "androidx.test:runner", version.ref = "androidx-test-runner" }
+androidx-test-ext-junit = { module = "androidx.test.ext:junit", version.ref = "androidx-test-ext-junit" }
+
+[plugins]
+android-library = { id = "com.android.library", version.ref = "agp" }
+android-application = { id = "com.android.application", version.ref = "agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Fire TV launcher banner (320x180): a pause button and the waves of a spoken command. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="320dp"
+    android:height="180dp"
+    android:viewportWidth="320"
+    android:viewportHeight="180">
+    <path
+        android:fillColor="#FF101418"
+        android:pathData="M0,0h320v180h-320z" />
+    <path
+        android:fillColor="#FFFF5A1F"
+        android:pathData="M60,90a50,50 0,1 1,100 0a50,50 0,1 1,-100 0z" />
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M93,68h11v44h-11zM116,68h11v44h-11z" />
+    <path
+        android:pathData="M190,70a28,28 0,0 1,0 40M212,56a48,48 0,0 1,0 68M234,42a68,68 0,0 1,0 96"
+        android:strokeWidth="8"
+        android:strokeColor="#FFFFFFFF"
+        android:strokeLineCap="round" />
+</vector>

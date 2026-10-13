@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Lets Fire OS deliver Alexa transport commands ("Alexa, pause", "Alexa, next") to the app's MediaSession.
+         Merged into the app's manifest; other Android devices ignore it. -->
+    <uses-permission android:name="com.amazon.permission.media.session.voicecommandcontrol" />
+
+</manifest>
