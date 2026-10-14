@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <application>
+        <!-- Fire OS only pauses the session of the app in front, so the Home-key test needs something on screen. -->
+        <activity
+            android:name="io.github.tapaderuza.firetv.voice.ForegroundActivity"
+            android:exported="false" />
+    </application>
+</manifest>

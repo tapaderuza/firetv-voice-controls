@@ -4,6 +4,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.media.session.MediaController
 import android.media.session.PlaybackState
+import android.os.Build
 import android.os.SystemClock
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
@@ -12,6 +13,7 @@ import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
+import org.junit.Assume.assumeTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -109,6 +111,26 @@ class VoiceControlsDeviceTest {
             )
             assertEquals(command to Source.MEDIA_SESSION, nextCommand())
         }
+    }
+
+    @Test
+    fun appCallsAreNotTheSystem() {
+        controller().transportControls.pause()
+        assertEquals(Command.PAUSE to Source.MEDIA_SESSION, nextCommand())
+    }
+
+    /** Fire OS behaviour this library documents: Home pauses the session of the app in front, from the system server. */
+    @Test
+    fun theHomeKeyPausesTheActiveSessionAsTheSystem() {
+        assumeTrue("Fire OS only", Build.MANUFACTURER.equals("Amazon", ignoreCase = true))
+        // Fire OS only pauses the session of the app in front.
+        val screen = instrumentation.startActivitySync(
+            Intent(context, ForegroundActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
+        )
+        update(Controls(Playback.PLAYING))
+        instrumentation.uiAutomation.executeShellCommand("input keyevent KEYCODE_HOME").close()
+        assertEquals(Command.PAUSE to Source.SYSTEM, nextCommand())
+        screen.finish()
     }
 
     @Test

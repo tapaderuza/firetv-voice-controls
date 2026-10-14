@@ -99,7 +99,11 @@ fun ClassBoard(board: BoardState) {
 private fun lastCommand(last: Pair<Command, Source>?): String {
     if (last == null) return "Waiting for a command"
     val (command, source) = last
-    val via = if (source == Source.MEDIA_SESSION) "Alexa / media session" else "remote key"
+    val via = when (source) {
+        Source.MEDIA_SESSION -> "Alexa / media session"
+        Source.SYSTEM -> "Fire OS"
+        Source.REMOTE_KEY -> "remote key"
+    }
     return "Last command: ${command.name.lowercase().replace('_', ' ')} · via $via"
 }
 

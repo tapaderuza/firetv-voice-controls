@@ -109,9 +109,12 @@ public class VoiceControls(
     }
 
     private fun deliver(command: Command) {
+        // Only valid inside a MediaSession.Callback method, which is where this runs.
+        val caller = if (Build.VERSION.SDK_INT >= 28) session.currentControllerInfo else null
+        val source = Callers.sourceFor(caller?.uid)
         // INFO, not DEBUG: Fire OS drops DEBUG lines, and `adb logcat -s FireTvVoice` is how a command is traced.
-        Log.i(TAG, "media session: $command")
-        listener.onCommand(command, Source.MEDIA_SESSION)
+        Log.i(TAG, "media session: $command from ${caller?.packageName ?: "unknown"} (uid ${caller?.uid ?: "?"}) as $source")
+        listener.onCommand(command, source)
     }
 
     public companion object {

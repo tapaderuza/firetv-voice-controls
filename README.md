@@ -27,6 +27,9 @@ parts that are easy to get wrong:
   the class. Voice and keys need different commands.
 - **The remote has no Next/Previous keys,** and the D-pad and select button move focus in most UIs. A focus-less
   screen wants them; a menu does not.
+- **Home pauses you.** When the user presses Home, Fire OS's key policy sends PAUSE to the session of the app
+  in front, about 150 ms before `onPause`. Right for a video; wrong for a class timer shared by every TV in a gym.
+  The library tells you who sent each command (`Source.SYSTEM` for this one), so you can ignore it.
 - **No audio, no test.** On Fire OS 7, `adb shell media dispatch` never reaches a session that hasn't played audio,
   and `media monitor` lacks the permission, so there is no built-in way to script a voice test.
 
@@ -50,7 +53,7 @@ dependencyResolutionManagement {
 
 // app/build.gradle.kts
 dependencies {
-    implementation("com.github.tapaderuza:firetv-voice-controls:v0.1.0")
+    implementation("com.github.tapaderuza:firetv-voice-controls:v0.2.0")
 }
 ```
 
@@ -75,6 +78,7 @@ class BoardActivity : ComponentActivity() {
     }
 
     private fun onCommand(command: Command, source: Source): Boolean {
+        if (source == Source.SYSTEM) return true        // Fire OS pausing the app in front on Home
         when (command) {
             Command.PLAY -> board.resume()               // "Alexa, resume"
             Command.PAUSE, Command.STOP -> board.pause() // a second "Alexa, pause" keeps it paused
@@ -129,8 +133,8 @@ Right pages once, and a key your listener declines still reaches the UI.
 
 | What | How | Where |
 |---|---|---|
-| Mapping logic: state → actions, key → command, held keys | `./gradlew :voicecontrols:testDebugUnitTest` (13 tests) | JVM |
-| The session, driven through the system's media session service as Fire OS's voice service does | `./gradlew :voicecontrols:connectedDebugAndroidTest` (6 tests) | a Fire TV |
+| Mapping logic: state → actions, key → command, held keys, who called | `./gradlew :voicecontrols:testDebugUnitTest` (15 tests) | JVM |
+| The session, driven through the system's media session service as Fire OS's voice service does, and Fire OS's own pause on Home | `./gradlew :voicecontrols:connectedDebugAndroidTest` (8 tests) | a Fire TV |
 | Your own app by "voice" | build with `adbTestHook = BuildConfig.DEBUG`, then `scripts/alexa.sh pause com.your.app` | a Fire TV |
 | The sample, end to end, with a screenshot after each step | `scripts/device-check.sh` | a Fire TV |
 
@@ -149,11 +153,24 @@ stop, next, previous, fastforward, rewind). `adb logcat -s FireTvVoice` shows ev
 
 | Device | Fire OS | Unit tests | On-device tests | `device-check.sh` |
 |---|---|---|---|---|
-| Fire TV Stick (3rd gen, AFTSSS) | 7.7.1.7 (Android 9, API 28) | 13/13 | 6/6 | pass |
+| Fire TV Stick (3rd gen, AFTSSS) | 7.7.1.7 (Android 9, API 28) | 15/15 | 8/8 | pass |
 
 The on-device tests and the adb hook use a MediaController, which goes through the same system service as Fire
 OS's voice service. A spoken "Alexa" command needs a person and a microphone, so it isn't part of the automated
 checks. Reports from other devices (Fire OS 8, Fire TV Cube, Omni) are very welcome.
+
+## Who sent it
+
+Every command comes with its `Source`:
+
+| `Source` | Sent by | Typical handling |
+|---|---|---|
+| `MEDIA_SESSION` | Alexa (remote mic or Echo), the Fire TV mobile app, Bluetooth controls, the adb hook | act on it |
+| `SYSTEM` | Fire OS itself (uid 1000), e.g. the PAUSE it sends when the user presses Home | a video pauses; a shared screen ignores it |
+| `REMOTE_KEY` | a key on the remote, through `dispatchKeyEvent` | act on it; return false to leave it to the UI |
+
+The caller is known on API 28+ (Fire OS 7 and later). `adb logcat -s FireTvVoice` prints the caller's package
+and uid next to every command.
 
 ## Notes
 

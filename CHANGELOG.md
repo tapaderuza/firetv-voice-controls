@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.2.0 (2026-10-14)
+
+- `Source.SYSTEM`: commands the operating system sends on its own, told apart by the caller's uid (API 28+). On Fire OS,
+  pressing Home sends PAUSE to the session of the app in front about 150 ms before `onPause`; a screen with shared
+  state (a class timer on every TV in a gym) can now ignore it.
+- Every delivered command is logged with the caller's package and uid (`adb logcat -s FireTvVoice`).
+- New on-device test that presses Home and expects that PAUSE from the system; 15 unit and 8 on-device tests.
+- The sample keeps rotating when Fire OS pauses it on Home.
+
 ## 0.1.0 (2026-10-13)
 
 First release, extracted from ScreenDesk.

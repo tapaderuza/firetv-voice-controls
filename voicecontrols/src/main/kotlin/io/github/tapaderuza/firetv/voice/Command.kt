@@ -41,6 +41,14 @@ public enum class Source {
      */
     MEDIA_SESSION,
 
+    /**
+     * The app's MediaSession, called by the operating system itself rather than by a person. On Fire OS, pressing
+     * Home sends PAUSE to the active session about 150 ms before the activity's `onPause`. A video player wants
+     * that; a screen whose state is shared (a class timer on every TV in a gym) usually ignores it. Detected on
+     * API 28+ (Fire OS 7 and later); older versions report [MEDIA_SESSION].
+     */
+    SYSTEM,
+
     /** A key on the remote, through the activity's `dispatchKeyEvent`. */
     REMOTE_KEY,
 }

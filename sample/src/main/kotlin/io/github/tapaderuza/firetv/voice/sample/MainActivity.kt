@@ -36,6 +36,8 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun onCommand(command: Command, source: Source): Boolean {
+        // Fire OS pauses the app in front when Home is pressed. A board on the wall keeps its state for when it's back.
+        if (source == Source.SYSTEM) return true
         when (command) {
             // A voice command names the state it wants: a second "Alexa, pause" keeps the board paused.
             Command.PLAY -> board.playing = true
