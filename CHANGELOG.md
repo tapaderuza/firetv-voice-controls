@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.1 (2026-10-14)
+
+The same code as 0.2.0. JitPack's build of v0.2.0 failed because Maven Central rate-limited it (HTTP 429), and
+JitPack keeps failed builds, so use v0.2.1.
+
 ## 0.2.0 (2026-10-14)
 
 - `Source.SYSTEM`: commands the operating system sends on its own, told apart by the caller's uid (API 28+). On Fire OS,
