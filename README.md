@@ -28,7 +28,7 @@ parts that are easy to get wrong:
 - **The remote has no Next/Previous keys,** and the D-pad and select button move focus in most UIs. A focus-less
   screen wants them; a menu does not.
 - **No audio, no test.** On Fire OS 7, `adb shell media dispatch` never reaches a session that hasn't played audio,
-  and `media monitor` lacks the permission. Without this library's hook there is no way to script a voice test.
+  and `media monitor` lacks the permission, so there is no built-in way to script a voice test.
 
 This library is the code we wrote for [ScreenDesk](https://devpost.com/software/1458275), a Fire TV class screen
 for gyms built for the Amazon Developer Hackathon 2026, pulled out and generalised, with tests.
